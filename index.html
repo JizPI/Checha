@@ -1,65 +1,178 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <title>Checha, bir daqiqa...</title>
-    <style>
-        body {
-            background-color: #fff0f5;
-            color: #333;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
+  <meta charset="UTF-8">
+  <title>Checha, bir daqiqa...</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      overflow: hidden;
+      cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') 16 16, auto;
+    }
 
-        h1 {
-            font-size: 2.5em;
-            color: #c71585;
-            animation: fadeIn 2s ease-in-out;
-        }
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 60px 20px;
+      color: white;
+    }
 
-        p {
-            font-size: 1.2em;
-            max-width: 600px;
-            margin: auto;
-            margin-top: 30px;
-            animation: slideUp 1.5s ease-out;
-        }
+    h1 {
+      font-size: 3em;
+      animation: fadeIn 2s ease;
+    }
 
-        .heart {
-            font-size: 3em;
-            margin-top: 20px;
-            color: #ff69b4;
-            animation: pulse 1.2s infinite;
-        }
+    #typing {
+      font-size: 1.5em;
+      white-space: pre-line;
+      margin-top: 30px;
+      min-height: 100px;
+    }
 
-        /* Animatsiyalar */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    .heart, .falling-heart {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 2em;
+    }
 
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+    .heart {
+      animation: floatHeart 6s linear infinite;
+    }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-    </style>
+    .falling-heart {
+      animation: fallHeart linear infinite;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    /* Animations */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes floatHeart {
+      0% { bottom: 0; opacity: 0; transform: translateX(0); }
+      50% { opacity: 1; }
+      100% { bottom: 100vh; opacity: 0; transform: translateX(100px); }
+    }
+
+    @keyframes fallHeart {
+      0% { top: -5%; transform: rotate(0deg); opacity: 1; }
+      100% { top: 110%; transform: rotate(360deg); opacity: 0; }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="starCanvas"></canvas>
+
+  <div class="container">
     <h1>Checha, bir daqiqa...</h1>
-    <p>
-        Sizni "hunuk" deb aytganim hazil edi. Agar bu so‘z sizni hafa qilgan bo‘lsa, chin dildan uzr so‘rayman.
-        Bilaman, bu shunchaki kulguli bo‘lishi kerak edi, lekin ba'zida hazil noto‘g‘ri tushunilishi mumkin.
-    </p>
-    <p>
-        Siz aslida o‘zingizga xos, kulgili va ajoyib odamsiz. Shunchaki bir tabassum ulashmoqchi edim. Agar ko‘nglingiz og‘rigan bo‘lsa bundan xursandman. Hazil 😅😘
-    </p>
-    <div class="heart">♥</div>
+    <div id="typing"></div>
+  </div>
+
+  <!-- Flying Hearts -->
+  <script>
+    for (let i = 0; i < 20; i++) {
+      let heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+      heart.innerHTML = "♥";
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <!-- Falling Hearts -->
+  <script>
+    for (let i = 0; i < 30; i++) {
+      let heart = document.createElement("div");
+      heart.className = "falling-heart";
+      heart.innerHTML = "♥";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = Math.random() * -100 + "vh";
+      heart.style.fontSize = (1 + Math.random() * 2) + "em";
+      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <!-- Typing Effect -->
+  <script>
+    const text = `Sizni "hunuk" deb aytganim hazil edi.
+Agar bu so‘z sizni hafa qilgan bo‘lsa, chin dildan uzr.
+Siz aslida ajoyibsiz. Yuragingiz o‘ziga xos.
+Shunchaki tabassum ulashmoqchi edim.
+Bu sahifa – sizga atalgan.`;
+    let i = 0;
+    function typeText() {
+      if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeText, 50);
+      }
+    }
+    typeText();
+  </script>
+
+  <!-- Mouse-responsive Stars (Canvas) -->
+  <script>
+    const canvas = document.getElementById("starCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+    for (let i = 0; i < 100; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2,
+        speed: Math.random() * 0.5 + 0.2
+      });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#fff";
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+        star.y += star.speed;
+        if (star.y > canvas.height) star.y = 0;
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    drawStars();
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+  <!-- Romantic Music -->
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    Sizning brauzeringiz audio pleerni qo‘llab-quvvatlamaydi.
+  </audio>
 </body>
 </html>
