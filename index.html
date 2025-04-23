@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Checha, bir daqiqa...</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://threejs.org/examples/js/loaders/FontLoader.js"></script>
-  <script src="https://threejs.org/examples/js/geometries/TextGeometry.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -17,6 +14,7 @@
       overflow: hidden;
       cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') 16 16, auto;
     }
+
     .container {
       position: relative;
       z-index: 2;
@@ -24,27 +22,33 @@
       padding: 60px 20px;
       color: white;
     }
+
     h1 {
-      font-size: 3em;
+      font-size: 9em;
       animation: fadeIn 2s ease;
     }
+
     #typing {
-      font-size: 1.5em;
+      font-size: 4.5em;
       white-space: pre-line;
       margin-top: 30px;
       min-height: 100px;
     }
+
     .heart, .falling-heart {
       position: absolute;
       color: #ff69b4;
       font-size: 2em;
     }
+
     .heart {
       animation: floatHeart 6s linear infinite;
     }
+
     .falling-heart {
       animation: fallHeart linear infinite;
     }
+
     canvas {
       position: absolute;
       top: 0;
@@ -57,15 +61,18 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.8); }
       to { opacity: 1; transform: scale(1); }
     }
+
     @keyframes floatHeart {
       0% { bottom: 0; opacity: 0; transform: translateX(0); }
       50% { opacity: 1; }
       100% { bottom: 100vh; opacity: 0; transform: translateX(100px); }
     }
+
     @keyframes fallHeart {
       0% { top: -5%; transform: rotate(0deg); opacity: 1; }
       100% { top: 110%; transform: rotate(360deg); opacity: 0; }
@@ -74,6 +81,7 @@
 </head>
 <body>
   <canvas id="starCanvas"></canvas>
+
   <div class="container">
     <h1>Checha, bir daqiqa...</h1>
     <div id="typing"></div>
@@ -105,11 +113,11 @@
     }
   </script>
 
-  <!-- Typing Effect -->
+  <!-- Typing Effect with New Text -->
   <script>
-    const text = `Sizni "hunuk" deb aytganim hazil edi.
-Agar bu so‘z sizni hafa qilgan bo‘lsa, chin dildan uzr.
-Bu gaplarni ertalab o’qiyotganingiz aniq. Shuning uchun yuzingizni yuvib kelsayiz yaxshi bo’larmidi.😁
+    const text = `Sizni "hunuk" deb aytganim hazil edi. 😁
+Agar bu so‘z sizni hafa qilgan bo‘lsa, chin dildan uzr. 😁
+Bu gaplarni ertalab o’qiyotganingiz aniq. Shuning uchun yuzingizni yuvib kelsayiz yaxshi bo’larmidi. 😁
 Ko’nglizni og’ritgan bo’lsam bundan judayam xursandman. Hazil 😁`;
     let i = 0;
     function typeText() {
@@ -121,79 +129,5 @@ Ko’nglizni og’ritgan bo’lsam bundan judayam xursandman. Hazil 😁`;
     }
     typeText();
   </script>
-
-  <!-- Yulduzlar -->
-  <script>
-    const canvas = document.getElementById("starCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const stars = [];
-    for (let i = 0; i < 100; i++) {
-      stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: Math.random() * 2, speed: Math.random() * 0.5 + 0.2 });
-    }
-    function drawStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#fff";
-      stars.forEach(star => {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-        star.y += star.speed;
-        if (star.y > canvas.height) star.y = 0;
-      });
-      requestAnimationFrame(drawStars);
-    }
-    drawStars();
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
-
-  <!-- 3D LOVE TEXT with Three.js -->
-  <script>
-    const threeScene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.domElement.style.position = 'absolute';
-    renderer.domElement.style.top = '0';
-    document.body.appendChild(renderer.domElement);
-
-    const fontLoader = new THREE.FontLoader();
-    fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
-      const textGeometry = new THREE.TextGeometry('LOVE', {
-        font: font,
-        size: 4,
-        height: 1,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness: 0.1,
-        bevelSize: 0.1,
-        bevelSegments: 3
-      });
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff1493 });
-      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-      textMesh.position.set(-10, 0, 0);
-      threeScene.add(textMesh);
-
-      camera.position.z = 20;
-
-      function animate() {
-        requestAnimationFrame(animate);
-        textMesh.rotation.x += 0.01;
-        textMesh.rotation.y += 0.01;
-        renderer.render(threeScene, camera);
-      }
-      animate();
-    });
-  </script>
-
-  <!-- Romantic Music -->
-  <audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
-    Sizning brauzeringiz audio pleerni qo‘llab-quvvatlamaydi.
-  </audio>
 </body>
-</html>
+</html>u
